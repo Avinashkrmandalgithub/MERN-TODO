@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import connectToDb from './config/connectToDb.js';
 
 import authRoutes from './routes/auth.routes.js';
+import todoRoutes from './routes/todo.routes.js';
 
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(cookieParser());
 
 // routes 
 app.use("/api/auth", authRoutes);
+app.use("/api/todos", todoRoutes)
 
 
 const PORT = process.env.PORT || 3000;
