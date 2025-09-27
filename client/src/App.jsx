@@ -12,6 +12,9 @@ const App = () => {
       <Route path='/signin' element={ <SignInPage /> } />
 
       <Route path='/home' element={ <Home /> } />
+
+      {/* default route */}
+      <Route path='/' element={ <SignInPage /> } />
     </Routes>
   )
 }
