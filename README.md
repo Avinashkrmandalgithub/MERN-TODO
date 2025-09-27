@@ -27,5 +27,5 @@ A modern, responsive, and dark/light-themed **Todo application** built with **Re
 
 ---
 
-## Folder Structure
+
 
