@@ -5,25 +5,25 @@ const TodoStatsFilter = ({ todos, filter, setFilter }) => {
   const completedCount = todos.filter((t) => t.completed).length;
 
   return (
-    <div className="max-w-3xl mx-auto mt-6 bg-white dark:bg-gray-800 shadow-md rounded-2xl p-6">
-      <div className="flex justify-between items-center mb-4 text-gray-600 dark:text-gray-300">
-        <p className="flex items-center space-x-2">
+    <div className="max-w-full sm:max-w-3xl mx-auto mt-4 sm:mt-6 bg-white dark:bg-gray-800 shadow-md rounded-2xl p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 text-gray-600 dark:text-gray-300 space-y-2 sm:space-y-0">
+        <p className="flex items-center space-x-2 text-sm sm:text-base">
           <FaRegCircle className="text-orange-500" />
           <span>{activeCount} active</span>
         </p>
-        <p className="flex items-center space-x-2">
+        <p className="flex items-center space-x-2 text-sm sm:text-base">
           <FaCheckCircle className="text-green-500" />
           <span>{completedCount} completed</span>
         </p>
       </div>
 
       {/* Filter Buttons */}
-      <div className="flex space-x-2">
+      <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
         {["all", "active", "completed"].map((type) => (
           <button
             key={type}
             onClick={() => setFilter(type)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition 
+            className={`px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base font-medium transition 
               ${
                 filter === type
                   ? "bg-gradient-to-r from-orange-400 to-green-400 text-white shadow-md"

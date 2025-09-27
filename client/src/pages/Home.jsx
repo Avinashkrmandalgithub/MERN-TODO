@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
+import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 
 import useTodoStore from "../store/useTodoStore.js";
 import useAuthStore from "../store/useAuthStore.js"; 
-
-import { motion, AnimatePresence } from "framer-motion";
-import toast from "react-hot-toast";
 
 import TodoCard from "../components/TodoCard.jsx";
 import Header from "../components/Header.jsx";
@@ -13,19 +12,10 @@ import TodoInput from "../components/TodoInput.jsx";
 import TodoStatsFilter from "../components/TodoStatsFilter.jsx";
 import EmptyState from "../components/EmptyState.jsx";
 import WelcomeUser from "../components/WelcomeUser.jsx";
+import Footer from "../components/Footer.jsx";
 
 const Home = () => {
-  const {
-    todos,
-    fetchTodos,
-    createTodo,
-    updateTodo,
-    deleteTodo,
-    toggleTodo,
-    loading,
-    error,
-  } = useTodoStore();
-
+  const { todos, fetchTodos, createTodo, updateTodo, deleteTodo, toggleTodo, loading, error } = useTodoStore();
   const { logout } = useAuthStore(); 
   const navigate = useNavigate();
 
@@ -36,77 +26,67 @@ const Home = () => {
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
 
-  // Load todos on mount
-  useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);
+  useEffect(() => { fetchTodos(); }, [fetchTodos]);
 
   const handleAdd = async () => {
     if (!title.trim() || !body.trim()) return;
     await createTodo(title, body);
-    setTitle("");
-    setBody("");
+    setTitle(""); setBody("");
   };
 
   const startEditing = (id, title, body) => {
-    setEditingId(id);
-    setEditTitle(title);
-    setEditBody(body);
+    setEditingId(id); setEditTitle(title); setEditBody(body);
   };
 
   const saveEdit = async (id) => {
     await updateTodo(id, editTitle, editBody);
-    setEditingId(null);
-    setEditTitle("");
-    setEditBody("");
+    setEditingId(null); setEditTitle(""); setEditBody("");
   };
 
-  // ✅ Wire up logout
   const handleLogout = async () => {
     await logout();        
     navigate("/signin");    
-    toast.success("logged out")
+    toast.success("Logged out");
   };
 
-  const filteredTodos =
-    filter === "all"
-      ? todos
-      : filter === "active"
-      ? todos.filter((t) => !t.completed)
-      : todos.filter((t) => t.completed);
+  const filteredTodos = filter === "all" ? todos : filter === "active" ? todos.filter(t => !t.completed) : todos.filter(t => t.completed);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 px-4 sm:px-6 lg:px-8">
+      
+      {/* Header */}
       <Header filter={filter} setFilter={setFilter} handleLogout={handleLogout} />
-      <WelcomeUser username="Avinash" />
 
-      {/* Input */}
-      <TodoInput
-        title={title}
-        setTitle={setTitle}
-        body={body}
-        setBody={setBody}
-        handleAdd={handleAdd}
-      />
+      {/* Welcome */}
+      <div className="max-w-5xl mx-auto mt-4">
+        <WelcomeUser />
+      </div>
 
-      {/* Stats + Filter */}
-      <TodoStatsFilter todos={todos} filter={filter} setFilter={setFilter} />
+      {/* Todo Input */}
+      <div className="max-w-5xl mx-auto mt-6">
+        <TodoInput title={title} setTitle={setTitle} body={body} setBody={setBody} handleAdd={handleAdd} />
+      </div>
 
-      {/* Error state */}
-      {error && <p className="text-center text-red-500">{error}</p>}
+      {/* Stats Filter */}
+      <div className="max-w-5xl mx-auto mt-4">
+        <TodoStatsFilter todos={todos} filter={filter} setFilter={setFilter} />
+      </div>
 
-      {/* Todos */}
-      <div className="max-w-3xl mx-auto mt-4">
+      {/* Error */}
+      {error && <p className="text-center text-red-600 mt-4">{error}</p>}
+
+      {/* Todo List */}
+      <div className="max-w-5xl mx-auto mt-6">
         {loading ? (
-          <p className="text-center text-gray-500">Loading todos...</p>
+          <p className="text-center text-gray-500 dark:text-gray-300">Loading todos...</p>
         ) : filteredTodos.length === 0 ? (
           <EmptyState />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <AnimatePresence>
               {filteredTodos.map((todo) => (
                 <motion.div
-                  key={todo._id} // ✅ MongoDB _id
+                  key={todo._id}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
@@ -130,6 +110,9 @@ const Home = () => {
           </div>
         )}
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
