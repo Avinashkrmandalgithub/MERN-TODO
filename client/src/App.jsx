@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import useAuthStore from "./store/useAuthStore.js";
 import { Route, Routes } from "react-router-dom";
 import SignUpPage from "./pages/auth/SignUpPage.jsx";
@@ -14,15 +13,15 @@ const App = () => {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/signin" element={<SignInPage />} />
-
-      <Route path="/home" element={<Home />} />
-
-      {/* default route */}
-      <Route path="/" element={<SignInPage />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/home" element={<Home />} />
+        {/* default route */}
+        <Route path="/" element={<SignInPage />} />
+      </Routes>
+    </>
   );
 };
 

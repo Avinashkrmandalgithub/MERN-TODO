@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaEnvelope, FaLock, FaArrowRight } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuthStore from '../../store/useAuthStore.js';
+import toast from 'react-hot-toast';
 
 const SignInPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+  const { login, loading, error } = useAuthStore();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const user = await login(email, password);
+
+    if(user){
+      toast.success(`Welcome back, ${user.username}! 🎉`);
+      navigate("/home")
+    }
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-200 via-purple-200 to-green-200 p-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg">
@@ -16,7 +35,9 @@ const SignInPage = () => {
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form 
+        onSubmit={handleSubmit}
+        className="space-y-5">
           {/* Email */}
           <div>
             <label className="text-sm font-medium text-gray-700">Email</label>
@@ -26,8 +47,11 @@ const SignInPage = () => {
               </span>
               <input
                 type="email"
+                value={email}
                 placeholder="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+                required
               />
             </div>
           </div>
@@ -41,8 +65,11 @@ const SignInPage = () => {
               </span>
               <input
                 type="password"
+                value={password}
                 placeholder="Enter your password"
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+                required
               />
             </div>
           </div>
@@ -51,15 +78,19 @@ const SignInPage = () => {
           <div>
             <button
               type="submit"
+              disabled={loading}
               className="relative w-full flex justify-center items-center gap-2 py-3 px-4 font-semibold text-white rounded-lg shadow-md 
                          bg-gradient-to-r from-orange-400 via-purple-400 to-green-400 
                          bg-[length:200%_200%] bg-[position:100%_0] 
                          hover:bg-[position:0_0] transition-all duration-500 ease-out"
             >
               <FaArrowRight />
-              Sign In
+              {loading ? "Signing In..." : "Sign In"}
             </button>
           </div>
+
+          {/* Error */}
+          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
         </form>
 
         {/* Footer */}

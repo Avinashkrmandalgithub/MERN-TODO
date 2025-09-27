@@ -1,12 +1,32 @@
-import React from 'react';
-import { FaUser, FaEnvelope, FaLock, FaUserPlus } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { FaUser, FaEnvelope, FaLock, FaUserPlus } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/useAuthStore.js";
+import toast from "react-hot-toast"; 
 
 const SignUpPage = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+  const { register, loading, error } = useAuthStore();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const user = await register(email, username, password);
+
+    if (user) {
+      toast.success("Account created successfully ✅");
+      navigate("/signin");
+    } else if (error) {
+      toast.error(error);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-200 via-rose-200 to-cyan-200 p-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white/40 backdrop-blur-md rounded-2xl shadow-lg">
-        
         {/* Header */}
         <div className="text-center">
           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-purple-600">
@@ -16,7 +36,7 @@ const SignUpPage = () => {
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Username */}
           <div>
             <label className="text-sm font-medium text-gray-700">Username</label>
@@ -26,8 +46,11 @@ const SignUpPage = () => {
               </span>
               <input
                 type="text"
+                value={username}
                 placeholder="Enter your username"
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
               />
             </div>
           </div>
@@ -41,8 +64,11 @@ const SignUpPage = () => {
               </span>
               <input
                 type="email"
+                value={email}
                 placeholder="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
               />
             </div>
           </div>
@@ -57,7 +83,10 @@ const SignUpPage = () => {
               <input
                 type="password"
                 placeholder="Create a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full py-2 pl-10 pr-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
               />
             </div>
           </div>
@@ -66,20 +95,22 @@ const SignUpPage = () => {
           <div>
             <button
               type="submit"
-              className="relative w-full flex justify-center items-center gap-2 py-3 px-4 text-white font-semibold rounded-lg shadow-md 
+              disabled={loading}
+              className={`relative w-full flex justify-center items-center gap-2 py-3 px-4 text-white font-semibold rounded-lg shadow-md 
                          bg-gradient-to-r from-orange-400 via-teal-400 to-purple-500 
                          bg-[length:200%_200%] bg-[position:100%_0] 
-                         hover:bg-[position:0_0] transition-all duration-500 ease-out"
+                         hover:bg-[position:0_0] transition-all duration-500 ease-out
+                         ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
             >
               <FaUserPlus />
-              Create Account
+              {loading ? "Creating..." : "Create Account"}
             </button>
           </div>
         </form>
 
         {/* Footer */}
         <p className="text-sm text-center text-gray-600">
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Link to="/signin" className="font-semibold text-orange-600 hover:underline">
             Sign in
           </Link>

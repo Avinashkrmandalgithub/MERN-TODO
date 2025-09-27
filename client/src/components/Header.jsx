@@ -2,9 +2,11 @@ import { FaSignOutAlt } from "react-icons/fa";
 
 const Header = ({ filter, setFilter, handleLogout }) => {
   return (
-    <header className="sticky top-0 z-50 flex justify-between items-center mb-6 px-6 py-4 
+    <header
+      className="sticky top-0 z-50 flex justify-between items-center mb-6 px-6 py-4 
                        rounded-3xl shadow-lg 
-                       bg-white/30 dark:bg-gray-900/30 backdrop-blur-xl border border-white/20 dark:border-gray-700/20">
+                       bg-white/30 dark:bg-gray-900/30 backdrop-blur-xl border border-white/20 dark:border-gray-700/20"
+    >
       {/* Title */}
       <h1 className="text-3xl font-bold">
         <span className="text-orange-400">Todo </span>
