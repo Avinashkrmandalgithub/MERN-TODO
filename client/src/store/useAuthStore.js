@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import axios from "axios";
 
+
 const API_URL = import.meta.env.VITE_API_URL;
+
 
 const useAuthStore = create((set) => ({
   user: null,
@@ -63,7 +65,7 @@ const useAuthStore = create((set) => ({
         { withCredentials: true }
       );
       set({ user: null, loading: false, error: null });
-
+    
     } catch (error) {
       set({
         error: error.response?.data?.message || error.message,
@@ -81,8 +83,12 @@ const useAuthStore = create((set) => ({
       set({ user: data.user, loading: false, error: null });
 
       return data.user;
-    } catch {
-      set({ user: null, loading: false });
+    } catch (error) {
+      set({
+        user: null,
+        loading: false,
+        error: error.response?.data?.message || error.message,
+      });
     }
   },
 }));
