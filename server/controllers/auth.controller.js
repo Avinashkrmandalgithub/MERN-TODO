@@ -35,10 +35,11 @@ async function register(req, res) {
     });
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    });
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // true only in prod
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // lax works on localhost
+});
+
 
     res.status(200).json({
       message: "User registered successfully",
@@ -93,10 +94,11 @@ async function login(req, res) {
     );
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    });
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // true only in prod
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // lax works on localhost
+});
+
 
     res.status(200).json({
       message: "User logged In successfully",
