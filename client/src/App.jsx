@@ -16,7 +16,9 @@ const App = () => {
   const getUser = useAuthStore((state) => state.getUser);
 
   useEffect(() => {
-    getUser(); // run once on mount to restore session
+    if (document.cookie.includes("token")) {
+      getUser();
+    }
   }, [getUser]);
 
   return (
