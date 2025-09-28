@@ -14,8 +14,12 @@ const TodoCard = ({
 }) => {
   return (
     <div
-      className={`p-4 sm:p-5 rounded-2xl shadow-md transition 
-        ${todo.completed ? "bg-green-50 dark:bg-green-900/20 text-green-600 line-through" : "bg-white dark:bg-gray-800 dark:text-gray-200"}`}
+      className={`p-4 sm:p-5 rounded-2xl shadow-md transition flex flex-col justify-between h-full
+    ${
+      todo.completed
+        ? "bg-green-50 dark:bg-green-900/20 text-green-600 line-through"
+        : "bg-white dark:bg-gray-800 dark:text-gray-200"
+    }`}
     >
       {editingId === todo._id ? (
         <div className="flex flex-col space-y-3">
@@ -41,7 +45,9 @@ const TodoCard = ({
       ) : (
         <div onClick={() => toggleTodo(todo._id)} className="cursor-pointer">
           <h3 className="font-semibold text-base sm:text-lg">{todo.title}</h3>
-          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">{todo.body}</p>
+          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+            {todo.body}
+          </p>
         </div>
       )}
 

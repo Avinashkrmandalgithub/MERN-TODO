@@ -1,11 +1,12 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import axios from "axios";
 
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 
-const useAuthStore = create((set) => ({
+const useAuthStore = create(persist((set) => ({
   user: null,
   loading: false,
   error: null,
@@ -91,6 +92,6 @@ const useAuthStore = create((set) => ({
       });
     }
   },
-}));
+}), {name: "auth-storage" }));
 
 export default useAuthStore;
