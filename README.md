@@ -28,4 +28,5 @@ A modern, responsive, and dark/light-themed **Todo application** built with **Re
 ---
 
 
+<img width="1194" height="744" alt="image" src="https://github.com/user-attachments/assets/d87bb9e4-75f1-4f53-b032-00af0b09f927" />
 
